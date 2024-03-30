@@ -1,0 +1,17 @@
+﻿FUNCTION "EnS_LAcycCom_ResourceManagerFC" : Void
+TITLE = FC for LAcycCom ResourceManager Variant
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Siemens
+FAMILY : EnS
+VERSION : 1.0
+//FC for LAcycCom ResourceManager Variant
+
+BEGIN
+	
+	//LAcycCom ResourceManager Variant
+	"EnS_LAcycCom_ResourceManager"(enable := True,
+	                               requestBufferHeader := "LAcycCom_RequestBuffer"."header",
+	                               requestBufferElements := "LAcycCom_RequestBuffer"."elements");
+	
+END_FUNCTION
+

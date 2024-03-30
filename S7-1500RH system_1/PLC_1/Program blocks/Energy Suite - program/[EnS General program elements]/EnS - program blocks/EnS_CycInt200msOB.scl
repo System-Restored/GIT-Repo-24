@@ -1,0 +1,18 @@
+﻿ORGANIZATION_BLOCK "EnS_CycInt200msOB"
+TITLE = Cyclic interrupt OB of 200ms
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Siemens
+FAMILY : EnS
+VERSION : 1.0
+//Cyclic interrupt OB of 200ms
+
+BEGIN
+	//FC for organizational data in cyclic interrupt OB
+	"EnS_Org_CycInt200msFC"();
+	//FC for driver advanced functionality of measuring points in cyclic interrupt OB
+	"EnS_DrvAdv_CycInt200msFC"();
+	//FC for advanced data in cyclic interrupt OB
+	"EnS_Adv_CycInt200msFC"();
+	
+END_ORGANIZATION_BLOCK
+

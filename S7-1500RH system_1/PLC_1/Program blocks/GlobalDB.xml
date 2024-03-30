@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V19" />
+  <SW.Blocks.GlobalDB ID="0">
+    <AttributeList>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+  <Section Name="Static">
+    <Member Name="RTInfo" Datatype="Struct" Remanence="Retain">
+      <Comment>
+        <MultiLanguageText Lang="en-US">Used to collect runtime information on an individual FB/FC</MultiLanguageText>
+      </Comment>
+      <Member Name="Mode" Datatype="UInt">
+        <StartValue>1</StartValue>
+      </Member>
+      <Member Name="OBnumber" Datatype="OB_ANY">
+        <StartValue>1</StartValue>
+      </Member>
+      <Member Name="Info_LTIME" Datatype="LTime">
+        <StartValue>LT#0NS</StartValue>
+      </Member>
+      <Member Name="RetVal" Datatype="Int">
+        <StartValue>0</StartValue>
+      </Member>
+    </Member>
+    <Member Name="Runtime" Datatype="Struct" Remanence="Retain">
+      <Comment>
+        <MultiLanguageText Lang="en-US">Used to collect individual runtime information of OB</MultiLanguageText>
+      </Comment>
+      <Member Name="OB1Scan" Datatype="Struct">
+        <Member Name="Min" Datatype="LReal">
+          <StartValue>1000.0</StartValue>
+        </Member>
+        <Member Name="Max" Datatype="LReal" />
+        <Member Name="Current" Datatype="LReal">
+          <AttributeList>
+            <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+            <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+            <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+          </AttributeList>
+        </Member>
+        <Member Name="temp" Datatype="LReal">
+          <AttributeList>
+            <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+            <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+            <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+          </AttributeList>
+        </Member>
+        <Member Name="Mem" Datatype="LReal">
+          <AttributeList>
+            <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+            <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+            <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+          </AttributeList>
+          <StartValue>0.0</StartValue>
+        </Member>
+        <Member Name="PreviousScan" Datatype="LReal">
+          <AttributeList>
+            <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">false</BooleanAttribute>
+            <BooleanAttribute Name="ExternalVisible" SystemDefined="true">false</BooleanAttribute>
+            <BooleanAttribute Name="ExternalWritable" SystemDefined="true">false</BooleanAttribute>
+          </AttributeList>
+        </Member>
+        <Member Name="ResetMin" Datatype="Bool" />
+        <Member Name="Reset Max" Datatype="Bool" />
+      </Member>
+    </Member>
+    <Member Name="Trigger_StopSynch" Datatype="Struct" Remanence="Retain">
+      <Comment>
+        <MultiLanguageText Lang="en-US">Used to trigger the Swapping of Status on the Reundant PLC</MultiLanguageText>
+      </Comment>
+      <Member Name="REQ_FullSwapSequence" Datatype="Bool">
+        <AttributeList>
+          <BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute>
+        </AttributeList>
+        <Comment>
+          <MultiLanguageText Lang="en-US">Trigger used to perform a full swap of PLCs</MultiLanguageText>
+        </Comment>
+      </Member>
+      <Member Name="REQ_StopPrimary" Datatype="Bool">
+        <AttributeList>
+          <BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute>
+        </AttributeList>
+        <Comment>
+          <MultiLanguageText Lang="en-US">trigger a primary stop</MultiLanguageText>
+        </Comment>
+      </Member>
+      <Member Name="REQ_SynchUp" Datatype="Bool">
+        <AttributeList>
+          <BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute>
+        </AttributeList>
+        <Comment>
+          <MultiLanguageText Lang="en-US">trigger a synchronization</MultiLanguageText>
+        </Comment>
+      </Member>
+      <Member Name="Mode_StopPrimary" Datatype="Int">
+        <Comment>
+          <MultiLanguageText Lang="en-US">Stop Primary = 8</MultiLanguageText>
+        </Comment>
+        <StartValue>8</StartValue>
+      </Member>
+      <Member Name="Mode_SynchUp" Datatype="Int">
+        <Comment>
+          <MultiLanguageText Lang="en-US">Synchronization = 7</MultiLanguageText>
+        </Comment>
+        <StartValue>7</StartValue>
+      </Member>
+      <Member Name="StopPrimary_Retry_Busy" Datatype="Bool">
+        <Comment>
+          <MultiLanguageText Lang="en-US">triggered due to RHCTRL being busy</MultiLanguageText>
+        </Comment>
+      </Member>
+      <Member Name="SynchUp_Retry_Busy" Datatype="Bool">
+        <Comment>
+          <MultiLanguageText Lang="en-US">triggered due to RHCTRL being busy</MultiLanguageText>
+        </Comment>
+      </Member>
+      <Member Name="SyncSequenceFlag" Datatype="Bool" />
+      <Member Name="RH_CTRL_PrimaryStop" Datatype="Struct">
+        <Comment>
+          <MultiLanguageText Lang="en-US">Used to stop and synch primary or backup</MultiLanguageText>
+        </Comment>
+        <Member Name="REQ" Datatype="Bool" />
+        <Member Name="Ret_Val" Datatype="Byte" />
+        <Member Name="Busy" Datatype="Bool" />
+      </Member>
+      <Member Name="RH_CTRL_SyncUp" Datatype="Struct">
+        <Comment>
+          <MultiLanguageText Lang="en-US">Used to stop and synch primary or backup</MultiLanguageText>
+        </Comment>
+        <Member Name="REQ" Datatype="Bool" />
+        <Member Name="Ret_Val" Datatype="Byte" />
+        <Member Name="Busy" Datatype="Bool" />
+      </Member>
+      <Member Name="SyncSequenceTimer" Datatype="IEC_TIMER" Version="1.0" />
+      <Member Name="SequenceTimer" Datatype="IEC_TIMER" Version="1.0">
+        <Comment>
+          <MultiLanguageText Lang="en-US">Timer to sequence between stop and synch</MultiLanguageText>
+        </Comment>
+        <Sections>
+          <Section Name="None">
+            <Member Name="PT" Datatype="Time">
+              <Comment>
+                <MultiLanguageText Lang="en-US">Time based on full sequence elapsed timer</MultiLanguageText>
+              </Comment>
+              <StartValue>T#25s</StartValue>
+            </Member>
+          </Section>
+        </Sections>
+      </Member>
+      <Member Name="SequenceAlarm" Datatype="Bool">
+        <AttributeList>
+          <BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute>
+        </AttributeList>
+      </Member>
+    </Member>
+    <Member Name="Network" Datatype="&quot;NetworkSwitchHMI&quot;" Remanence="Retain">
+      <AttributeList>
+        <BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+      <Comment>
+        <MultiLanguageText Lang="en-US">Used to collect switch XC208 details</MultiLanguageText>
+      </Comment>
+    </Member>
+    <Member Name="SystemTime" Datatype="DTL" Version="1.0" Remanence="Retain">
+      <AttributeList>
+        <BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+      <Comment>
+        <MultiLanguageText Lang="en-US">Used to record cycle time of code</MultiLanguageText>
+      </Comment>
+    </Member>
+    <Member Name="tempSystemTime" Datatype="Int" Remanence="Retain">
+      <AttributeList>
+        <BooleanAttribute Name="SetPoint" SystemDefined="true">true</BooleanAttribute>
+      </AttributeList>
+    </Member>
+    <Member Name="Array" Datatype="Array[0..1000] of &quot;typeDiagnostics&quot;" Remanence="Retain">
+      <Comment>
+        <MultiLanguageText Lang="en-US">Test Array</MultiLanguageText>
+      </Comment>
+    </Member>
+  </Section>
+</Sections></Interface>
+      <MemoryLayout>Standard</MemoryLayout>
+      <Name>GlobalDB</Name>
+      <Namespace />
+      <Number>9</Number>
+      <ProgrammingLanguage>DB</ProgrammingLanguage>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="3" CompositionName="Items">
+            <AttributeList>
+              <Culture>de-DE</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="4" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="5" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="6" CompositionName="Items">
+            <AttributeList>
+              <Culture>de-DE</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.GlobalDB>
+</Document>

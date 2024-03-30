@@ -1,0 +1,14 @@
+﻿ORGANIZATION_BLOCK "EnS_LAcycCom_MainOB"
+TITLE = Acyclic Communication OB
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Siemens
+FAMILY : EnS
+VERSION : 1.0
+//Acyclic Communication OB
+
+BEGIN
+	//FC for LAcycCom ResourceManager Variant
+	"EnS_LAcycCom_ResourceManagerFC"();
+	
+END_ORGANIZATION_BLOCK
+

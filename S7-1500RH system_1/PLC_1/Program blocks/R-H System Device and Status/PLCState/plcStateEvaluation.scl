@@ -1,0 +1,146 @@
+﻿FUNCTION_BLOCK "plcStateEvaluation"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      primaryID : Int;
+      plc1OperationState : UInt;
+      plc2OperationState : UInt;
+      plcOperationStateSystem : UInt;
+      plcMrpRingState : UInt;
+   END_VAR
+
+   VAR_OUTPUT 
+      PLC_OperateStatus : Int;
+      PLC_MrpState : Int;
+      PLC1_LEDStatus : Int;
+      PLC2_LEDStatus : Int;
+   END_VAR
+
+   VAR_IN_OUT 
+      PLC12_StopMonitoring : Int;
+   END_VAR
+
+   VAR 
+      statPrimaryID : Int;
+      statPlc1State : UInt;
+      statPlc2State : UInt;
+      statPlcStateSystem : UInt;
+      statPlcMrpRingState : UInt;
+      statPlcStatus : Int;
+      statPLC12StopMonitoring : Int;
+   END_VAR
+
+
+BEGIN
+	//Wertzuweisung
+	//
+	
+	#statPrimaryID := #primaryID;
+	#statPlc1State := #plc1OperationState;
+	#statPlc2State := #plc2OperationState;
+	#statPlcStateSystem:= #plcOperationStateSystem;
+	#statPlcMrpRingState := #plcMrpRingState;
+	#PLC12_StopMonitoring := #statPLC12StopMonitoring;
+	
+	//PLC1 Status 
+	// 
+	CASE #statPlc1State OF 
+	    1:  #PLC1_LEDStatus:= 1 //Synchronisiert
+	        ;
+	    4:
+	        #PLC1_LEDStatus := 2 //Stop
+	        ;
+	    8:
+	        #PLC1_LEDStatus := 3   //RUN-Solo
+	        ;
+	    9:
+	        #PLC1_LEDStatus := 4   //RUN-Redundant
+	        ;
+	    21:
+	        #PLC1_LEDStatus := 5   //Run-Syncup
+	        ;
+	    22:
+	        #PLC1_LEDStatus := 6   //SYNCUP (nur die Backup PLC in SYNCUP)
+	        ;
+	    31:
+	        #PLC1_LEDStatus := 7   //Zustand der Partner PLC unbekannt (z. B. wenn nicht erreichbar)
+	        ;
+	    37:
+	        #PLC1_LEDStatus := 8   //RUN-Solo
+	        ;
+	    40:
+	        #PLC1_LEDStatus := 9   //RUN-Redundant
+	        ;
+	    ELSE
+	        #PLC1_LEDStatus := 10   //Details siehe Doku
+	        ;
+	END_CASE;
+	
+	
+	//PLC2 Status 
+	// 
+	CASE #statPlc2State OF
+	    1:
+	        #PLC2_LEDStatus := 1 //Synchronisiert
+	        ;
+	    4:
+	        #PLC2_LEDStatus := 2 //Stop
+	        ;
+	    8:
+	        #PLC2_LEDStatus := 3   //RUN-Solo
+	        ;
+	    9:
+	        #PLC2_LEDStatus := 4   //RUN-Redundant
+	        ;
+	    21:
+	        #PLC2_LEDStatus := 5   //Run-Syncup
+	        ;
+	    22:
+	        #PLC2_LEDStatus := 6   //SYNCUP (nur die Backup PLC in SYNCUP)
+	        ;
+	    31:
+	        #PLC2_LEDStatus := 7   //Zustand der Partner PLC unbekannt (z. B. wenn nicht erreichbar)
+	        ;
+	    37:
+	        #PLC2_LEDStatus := 8   //RUN-Solo
+	        ;
+	    40:
+	        #PLC2_LEDStatus := 9   //RUN-Redundant
+	        ;
+	    ELSE
+	        #PLC1_LEDStatus := 10   //Details siehe Doku
+	        ;
+	END_CASE;
+	
+	
+	//PLC 1/2 Betriebszustand
+	//
+	IF #statPrimaryID = 1 THEN
+	    #PLC_OperateStatus := 1;    //PLC1 Primary
+	END_IF;
+	
+	IF #statPrimaryID = 2 THEN
+	    #PLC_OperateStatus := 2;    //PLC2 Primary
+	END_IF;
+	
+	
+	//MRP-Ring
+	//
+	CASE #statPlcMrpRingState OF
+	    0:
+	        #PLC_MrpState := 0 //Ring Offen
+	        ;
+	    1:
+	        #PLC_MrpState := 1 //Ring geschlossen
+	        ;
+	    2:
+	        #PLC_MrpState := 2   //Zustand undefiniert
+	        ;
+	END_CASE;
+	
+	
+	//Auswertung beide CPUen in Stop
+	//
+	#statPLC12StopMonitoring := 200;    //Konstante, die durch ein Skript im HMI zurückgesetzt wird
+END_FUNCTION_BLOCK
+

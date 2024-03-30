@@ -1,0 +1,471 @@
+﻿FUNCTION_BLOCK "LPNDR_ReadGlobalInfo_2"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      execute : Bool;
+      hwId : HW_IO;
+      mode : Int;
+   END_VAR
+
+   VAR_OUTPUT 
+      busy : Bool;
+      done : Bool;
+      error : Bool;
+      status : Word;
+   END_VAR
+
+   VAR_IN_OUT 
+      DataRecord : Variant;
+   END_VAR
+
+   VAR 
+      InstReadRecord {InstructionName := 'RDREC'; LibVersion := '1.0'} : RDREC;
+      statReadRecord { ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : Array[0..4175] of Byte;
+      statReadRecordLength : UInt;
+      statReadRecordRequest : Bool;
+      statOldExecute : Bool;
+      statPDInterfaceMrpDataReal : UInt;
+      statPDPortMrpDataReal : UInt;
+      statPDInterfaceDataReal : UInt;
+      statPDPortDataReal : UInt;
+      statPDPortStatistic : UInt;
+      statUnknown : UInt;
+      statInterfaceInformation : "LPNDR_typeInterfaceInformation";
+      statPortInformation : Array[1..52] of "LPNDR_typePortInformation";
+      statPortLinkState : Array[1..52] of "LPNDR_typePortLinkState";
+      statPortStatistic : Array[1..52] of "LPNDR_typePortStatistic";
+      statBusy { S7_SetPoint := 'True'} : Bool;
+   END_VAR
+
+   VAR_TEMP 
+      i : DInt;
+      tempDataWord : Word;
+      tempDataDWord : DWord;
+      tempIndex : DInt;
+      tempReturnValue : Int;
+      tempPortNumber : USInt;
+      tempNextMultipleBlockIndex : DInt;
+      tempNextSubBlockIndex : DInt;
+      tempState : Int;
+      tempStatus : Word;
+   END_VAR
+
+   VAR CONSTANT 
+      INVALID_TYPE_DATA_RECORD : Word := 16#5000;
+      INVALID_MODE : Word := 16#5001;
+      INVALID_ARRAY_TOO_SMALL : Word := 16#5002;
+   END_VAR
+
+
+BEGIN
+	IF #execute <> #statOldExecute THEN
+	  #statOldExecute := #execute;
+	  
+	  IF #statOldExecute THEN //positive edge
+	    #statReadRecordRequest := true;
+	    
+	    #statReadRecordLength := 0;
+	    
+	    #status := 0;
+	    #statBusy := true;
+	    #done := false;
+	    #error := false;
+	  END_IF;
+	END_IF;
+	IF NOT #execute
+	    AND NOT #statBusy
+	THEN
+	    #status := 0;
+	    #statBusy := 0;
+	    #done := false;
+	    #error := false;
+	END_IF;
+	
+	#InstReadRecord(REQ := #statReadRecordRequest,
+	                ID := #hwId,
+	                INDEX := 16#F841, //PDDataReal
+	                MLEN := 0,
+	                RECORD := #statReadRecord);
+	
+	IF #InstReadRecord.VALID THEN
+	  #statReadRecordLength := #InstReadRecord.LEN;
+	  
+	  //init
+	 #statPDPortDataReal := 0;
+	#statPDInterfaceMrpDataReal := 0;
+	#statPDPortMrpDataReal := 0;
+	#statPDInterfaceDataReal := 0;
+	 #statPDPortStatistic := 0;
+	#statUnknown := 0;
+	  //get data
+	  //#tempIndex := 0; //get 1st BlockType
+	  #tempPortNumber := 0;
+	  WHILE (#tempIndex < #statReadRecordLength) DO
+	    #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                 dest_Variable => #tempDataWord,
+	                                 pos := #tempIndex);
+	    IF #tempDataWord = 16#0400 THEN //BlockType = MultipleBlockHeader
+	      //get multiple block length
+	      #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                   dest_Variable => #tempDataWord,
+	                                   pos := #tempIndex);
+	      #tempNextMultipleBlockIndex := #tempIndex + #tempDataWord; //BlockLength + 4 bytes (BlockType + BlockLength); #tempIndex = 4
+	      
+	      //next BlockType
+	      #tempIndex := #tempIndex + 12;
+	      WHILE (#tempIndex < #tempNextMultipleBlockIndex) DO
+	        //get sub block length
+	        #tempIndex := #tempIndex + 2;
+	        #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                     dest_Variable => #tempDataWord,
+	                                     pos := #tempIndex);
+	        #tempNextSubBlockIndex := #tempIndex + #tempDataWord; //BlockLength + 4 bytes (BlockType + BlockLength); #tempIndex = 4
+	        
+	        //block type
+	        #tempIndex := #tempIndex - 4;
+	        #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                     dest_Variable => #tempDataWord,
+	                                     pos := #tempIndex);
+	        CASE WORD_TO_INT(#tempDataWord) OF
+	          16#020F: //PDPortDataReal
+	            REGION PDPortDataReal
+	            #statPDPortDataReal := #statPDPortDataReal + 1;
+	              
+	              //increase port number (index)
+	              #tempPortNumber := #tempPortNumber + 1;
+	              
+	              //get own port ID
+	              #tempIndex := #tempIndex + 10;
+	              #tempDataWord := #statReadRecord[#tempIndex]; //number of characters
+	              #tempIndex := #tempIndex + 1;
+	              Chars_TO_Strg(Chars := #statReadRecord,
+	                            pChars := #tempIndex,
+	                            Cnt := MIN(IN1 := INT_TO_WORD(MAX_LEN(#statPortInformation[#tempPortNumber].portDiagnostic.portName)), IN2 := #tempDataWord),
+	                            Strg => #statPortInformation[#tempPortNumber].portDiagnostic.portName);
+	              #statPortLinkState[#tempPortNumber].portName := #statPortInformation[#tempPortNumber].portDiagnostic.portName;
+	              //check if LLDP data is available
+	              #tempIndex := #tempIndex + #tempDataWord;
+	              IF #statReadRecord[#tempIndex] > 0 THEN
+	                //adjust padding bytes
+	                #tempDataDWord := (#tempDataWord + 6) MOD 4;
+	                IF #tempDataDWord > 0 THEN
+	                  #tempIndex := #tempIndex + (4 - DWORD_TO_WORD(#tempDataDWord));
+	                END_IF;
+	                
+	                //get ID of remote port
+	                #tempIndex := #tempIndex + 1;
+	                #tempDataWord := #statReadRecord[#tempIndex]; //number of characters
+	                #tempIndex := #tempIndex + 1;
+	                Chars_TO_Strg(Chars := #statReadRecord,
+	                              pChars := #tempIndex,
+	                              Cnt := MIN(IN1 := INT_TO_WORD(MAX_LEN(#statPortInformation[#tempPortNumber].peerPortName)), IN2 := #tempDataWord),
+	                              Strg => #statPortInformation[#tempPortNumber].peerPortName);
+	                
+	                //get name of remote station
+	                #tempIndex := #tempIndex + #tempDataWord;
+	                #tempDataWord := #statReadRecord[#tempIndex]; //number of characters
+	                #tempIndex := #tempIndex + 1;
+	                Chars_TO_Strg(Chars := #statReadRecord,
+	                              pChars := #tempIndex,
+	                              Cnt := #tempDataWord,
+	                              Strg => #statPortInformation[#tempPortNumber].peerNameofStation);
+	                
+	                //get cable delay in nsec
+	                #tempIndex := #tempIndex + #tempDataWord;
+	                
+	                //adjust padding bytes
+	                #tempDataDWord := (#tempDataWord + 10) MOD 4;
+	                IF #tempDataDWord > 0 THEN
+	                  #tempIndex := #tempIndex + (4 - DWORD_TO_WORD(#tempDataDWord));
+	                END_IF;
+	                
+	                #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                             dest_Variable => #tempDataDWord,
+	                                             pos := #tempIndex);
+	                IF #tempDataDWord <> 0 THEN
+	                    #statPortInformation[#tempPortNumber].lineDelay := DWORD_TO_UDINT(#tempDataDWord - 16#8000_0000);
+	                ELSE
+	                    #statPortInformation[#tempPortNumber].lineDelay:= 0;
+	                END_IF;
+	                
+	                //get remote MAC address
+	                FOR #i := 0 TO 5 BY 1 DO
+	                    #statPortInformation[#tempPortNumber].peerMacAdress[5-#i] := #statReadRecord[#tempIndex + #i];
+	                END_FOR;
+	              ELSE
+	                  #statPortInformation[#tempPortNumber].peerPortName:= '';
+	                  #statPortInformation[#tempPortNumber].peerNameofStation:= '';
+	                  #statPortInformation[#tempPortNumber].lineDelay:= 0;
+	                FOR #i := 0 TO 5 BY 1 DO
+	                    #statPortInformation[#tempPortNumber].peerMacAdress[#i] := 0;
+	                END_FOR;
+	              END_IF;
+	              
+	              //get MediaType
+	              #tempIndex := #tempNextSubBlockIndex - 4; //count index backwards
+	              #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                           dest_Variable => #tempDataDWord,
+	                                           pos := #tempIndex);
+	              #statPortInformation[#tempPortNumber].mediaType := DWORD_TO_USINT(#tempDataDWord);
+	              
+	              //get PortState
+	              #tempIndex := #tempIndex - 8;
+	              #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                           dest_Variable => #tempDataWord,
+	                                           pos := #tempIndex);
+	             
+	              #statPortInformation[#tempPortNumber].portDiagnostic.portLinkState := #tempDataWord.%B0;
+	              #statPortInformation[#tempPortNumber].portDiagnostic.portPortState := #tempDataWord.%B1;
+	              #statPortLinkState[#tempPortNumber].portLinkState := #tempDataWord.%B0;
+	              #statPortLinkState[#tempPortNumber].portPortState := #tempDataWord.%B1;
+	                
+	                //get MAUType
+	                #tempIndex := #tempIndex - 14;
+	                #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                             dest_Variable => #tempDataWord,
+	                                             pos := #tempIndex);
+	                CASE WORD_TO_INT(#tempDataWord) OF
+	                  16#0005, 16#000A, 16#000B, 16#000C, 16#000D:
+	                      #statPortInformation[#tempPortNumber].dataRate := '10M';
+	                  16#000F, 16#0010,  16#0011,  16#0012:
+	                      #statPortInformation[#tempPortNumber].dataRate  := '100M';
+	                  16#0015, 16#0016, 16#0018, 16#0019, 16#001A, 16#001D, 16#001E:
+	                          #statPortInformation[#tempPortNumber].dataRate := '1G';
+	                  16#002A:
+	                      #statPortInformation[#tempPortNumber].dataRate  := '2M';
+	                  16#002B:
+	                      #statPortInformation[#tempPortNumber].dataRate := '10M';
+	                  ELSE
+	                    IF #tempDataWord > 16#004E THEN
+	                        #statPortInformation[#tempPortNumber].dataRate := '0';
+	                  
+	                    ELSIF #tempDataWord >= 16#004B THEN
+	                   #statPortInformation[#tempPortNumber].dataRate  := '100G';
+	                    ELSIF #tempDataWord >= 16#0046 THEN
+	                        #statPortInformation[#tempPortNumber].dataRate := '40G';
+	                    ELSIF #tempDataWord >= 16#0041 THEN
+	                        #statPortInformation[#tempPortNumber].dataRate  := '10G';
+	                    ELSIF #tempDataWord >= 16#003B THEN
+	                        #statPortInformation[#tempPortNumber].dataRate := '10G1G';
+	                    ELSIF #tempDataWord >= 16#0038 THEN
+	                        #statPortInformation[#tempPortNumber].dataRate := '1G';
+	                    ELSIF #tempDataWord >= 16#0036 THEN
+	                        #statPortInformation[#tempPortNumber].dataRate := '10G'; //todo: or 100BasePXFD, see PN spec
+	                    ELSIF #tempDataWord >= 16#002F THEN
+	                        #statPortInformation[#tempPortNumber].dataRate  := '1G';
+	                    ELSIF #tempDataWord >= 16#002C THEN
+	                        #statPortInformation[#tempPortNumber].dataRate := '100M';
+	                    ELSIF #tempDataWord >= 16#001F THEN
+	                        #statPortInformation[#tempPortNumber].dataRate  := '10G';
+	                    ELSE
+	                        #statPortInformation[#tempPortNumber].dataRate := '0';
+	                    
+	                    END_IF;
+	            END_CASE;
+	            END_REGION
+	            
+	          16#0212: //PDInterfaceMrpDataReal
+	            REGION PDInterfaceMrpDataReal
+	             #statPDInterfaceMrpDataReal := #statPDInterfaceMrpDataReal + 1;
+	              
+	              #tempIndex := #tempIndex + 5;
+	              IF #statReadRecord[#tempIndex] = 1 THEN //number of MRP instances
+	                //get MRP role
+	                #tempIndex := #tempIndex + 25;
+	                #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                             dest_Variable => #tempDataWord,
+	                                             pos := #tempIndex);
+	                #statInterfaceInformation.mrp.mrpRole := WORD_TO_UINT(#tempDataWord);
+	                
+	                //get MRP domain name
+	              IF #tempDataWord > 0 THEN
+	                  #tempIndex := #tempIndex + 2;
+	                  #tempDataWord := #statReadRecord[#tempIndex]; //number of characters
+	                  #tempIndex := #tempIndex + 1;
+	                  Chars_TO_Strg(Chars := #statReadRecord,
+	                                pChars := #tempIndex,
+	                                Cnt := #tempDataWord,
+	                                Strg => #statInterfaceInformation.mrp.domainName);
+	                ELSE
+	                   #statInterfaceInformation.mrp.domainName:= '';
+	               END_IF;
+	                
+	                //todo
+	                //padding bytes
+	                //MRP parameters, but for now this information is not helpful
+	              END_IF;
+	            END_REGION
+	            
+	          16#0215: //PDPortMrpDataReal
+	            REGION PDPortMrpDataReal
+	             #statPDPortMrpDataReal :=#statPDPortMrpDataReal + 1;
+	            END_REGION
+	            
+	          16#0240: //PDInterfaceDataReal
+	            REGION PDInterfaceDataReal
+	             #statPDInterfaceDataReal := #statPDInterfaceDataReal + 1;
+	              
+	              //get device name
+	              #tempIndex := #tempIndex + 4;
+	              #tempDataWord := #statReadRecord[#tempIndex]; //number of characters
+	              #tempIndex := #tempIndex + 1;
+	              Chars_TO_Strg(Chars := #statReadRecord,
+	                            pChars := #tempIndex,
+	                            Cnt := #tempDataWord,
+	                            Strg => #statInterfaceInformation.nameOfStation);
+	              
+	              #tempIndex := #tempIndex + #tempDataWord;
+	              //adjust padding bytes
+	              #tempDataDWord := (#tempDataWord + 7) MOD 4;
+	              IF #tempDataDWord > 0 THEN
+	                #tempIndex := #tempIndex + (4 - DWORD_TO_WORD(#tempDataDWord));
+	              END_IF;
+	              
+	              //get local MAC address
+	              FOR #i := 0 TO 5 BY 1 DO
+	                  #statInterfaceInformation.macAddress[5 - #i] := #statReadRecord[#tempIndex + #i];
+	              END_FOR;
+	              
+	              //get local IP address
+	              #tempIndex := #tempIndex + 8; //6 bytes of MAC + 2 padding bytes
+	              FOR #i := 0 TO 3 BY 1 DO
+	                  #statInterfaceInformation.ipAdress[3 - #i] := #statReadRecord[#tempIndex + #i];
+	              END_FOR;
+	                
+	              //get local subnetmask
+	              #tempIndex := #tempIndex + 4;
+	              FOR #i := 0 TO 3 BY 1 DO
+	                  #statInterfaceInformation.subnetMask[3 - #i] := #statReadRecord[#tempIndex + #i];
+	              END_FOR;
+	              
+	              //get local gateway
+	              #tempIndex := #tempIndex + 4;
+	              FOR #i := 0 TO 3 BY 1 DO
+	                  #statInterfaceInformation.gateway[3 - #i] := #statReadRecord[#tempIndex + #i];
+	              END_FOR;
+	            END_REGION
+	            
+	          16#0251: //PDPortStatistic
+	            REGION PDPortStatistic
+	               #statPDPortStatistic := #statPDPortStatistic + 1;
+	                IF #statPDPortStatistic > 1
+	                THEN
+	                    #tempIndex := #tempIndex + 6; //count index backwards
+	                    #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                                 dest_Variable => #statPortStatistic[#tempPortNumber].inOctets,
+	                                                 pos := #tempIndex);
+	                 
+	                    #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                                 dest_Variable => #statPortStatistic[#tempPortNumber].outOctets,
+	                                                 pos := #tempIndex);
+	                 
+	                    #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                                 dest_Variable => #statPortStatistic[#tempPortNumber].inDiscards,
+	                                                 pos := #tempIndex);
+	                  
+	                    #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                                 dest_Variable => #statPortStatistic[#tempPortNumber].outDiscards,
+	                                                 pos := #tempIndex);
+	                
+	                    #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                                 dest_Variable => #statPortStatistic[#tempPortNumber].inErrors,
+	                                                 pos := #tempIndex);
+	                    
+	                    #tempReturnValue := READ_BIG(src_array := #statReadRecord,
+	                                                 dest_Variable => #statPortStatistic[#tempPortNumber].outErrors,
+	                                                 pos := #tempIndex);
+	                ELSE
+	                    ;
+	                END_IF;
+	                    
+	            END_REGION
+	            
+	          ELSE
+	            REGION BlockUnknown
+	              #statUnknown := #statUnknown + 1;
+	              //RETURN; //for testing
+	            END_REGION
+	        END_CASE;
+	        
+	        #tempIndex := #tempNextSubBlockIndex;
+	      END_WHILE;
+	      
+	      #tempIndex := #tempNextMultipleBlockIndex;
+	    ELSE
+	      //todo
+	      ; //error: no multiple block or wrong next index calculation
+	    END_IF;
+	  END_WHILE;
+	  CASE #mode OF
+	      1:
+	          IF (TypeOf(#DataRecord) = LPNDR_typeInterfaceInformation) THEN
+	                  #tempState := MOVE_BLK_VARIANT(SRC := #statInterfaceInformation, COUNT := 1, SRC_INDEX := 0, DEST_INDEX := 0, DEST => #DataRecord);
+	         
+	          ELSE
+	              #tempState := WORD_TO_INT(#INVALID_TYPE_DATA_RECORD);
+	          END_IF;
+	      2:
+	          IF (TypeOf(#DataRecord) = LPNDR_typeMrpInformation) THEN
+	              #tempState := MOVE_BLK_VARIANT(SRC := #statInterfaceInformation.mrp, COUNT := 1, SRC_INDEX := 0, DEST_INDEX := 0, DEST => #DataRecord);
+	          ELSE
+	              #tempState := WORD_TO_INT(#INVALID_TYPE_DATA_RECORD);
+	          END_IF;
+	      3:
+	          IF (TypeOfElements(#DataRecord) = LPNDR_typePortInformation) THEN
+	              IF (CountOfElements(#DataRecord) > (#statPDPortDataReal - 2))
+	              THEN
+	                  #tempState := MOVE_BLK_VARIANT(SRC := #statPortInformation, COUNT := #statPDPortDataReal, SRC_INDEX := 0, DEST_INDEX := 0, DEST => #DataRecord);
+	              ELSE
+	                  #tempState := WORD_TO_INT(#INVALID_ARRAY_TOO_SMALL);
+	              END_IF;
+	          ELSE
+	              #tempState := WORD_TO_INT(#INVALID_TYPE_DATA_RECORD);
+	          END_IF;
+	  4:
+	      IF (TypeOfElements(#DataRecord) = LPNDR_typePortLinkState) THEN
+	          IF (CountOfElements(#DataRecord)> (#statPDPortDataReal-2))
+	              THEN
+	                  #tempState := MOVE_BLK_VARIANT(SRC := #statPortLinkState, COUNT := #statPDPortDataReal, SRC_INDEX := 0, DEST_INDEX := 0, DEST => #DataRecord);
+	              ELSE
+	                  #tempState := WORD_TO_INT(#INVALID_ARRAY_TOO_SMALL);
+	              END_IF;
+	      ELSE
+	          #tempState := WORD_TO_INT(#INVALID_TYPE_DATA_RECORD);
+	      END_IF;
+	  5:
+	      IF (TypeOfElements(#DataRecord) = LPNDR_typePortStatistic) THEN
+	          IF (CountOfElements(#DataRecord)> (#statPDPortStatistic-3))
+	              THEN
+	          #tempState := MOVE_BLK_VARIANT(SRC := #statPortStatistic, COUNT :=(#statPDPortStatistic-1), SRC_INDEX := 0, DEST_INDEX := 0, DEST => #DataRecord);
+	              ELSE
+	                  #tempState := WORD_TO_INT(#INVALID_ARRAY_TOO_SMALL);
+	              END_IF;
+	      ELSE
+	          #tempState := WORD_TO_INT(#INVALID_TYPE_DATA_RECORD);
+	      END_IF;
+	      
+	  ELSE
+	          #tempState := WORD_TO_INT(#INVALID_MODE);
+	  END_CASE;
+	  IF (#tempState > 0) THEN
+	      #statBusy := false;
+	      #error := true;
+	      #status := INT_TO_WORD(#tempState);
+	  ELSE
+	      #statBusy := false;
+	      #done := true;
+	  END_IF;
+	  
+	  #statReadRecordRequest := false;
+	ELSIF #InstReadRecord.ERROR THEN
+	    #tempStatus.%B0 := #InstReadRecord.STATUS.%B1;
+	    #tempStatus.%B1 := #InstReadRecord.STATUS.%B2;
+	    #status := #tempStatus;
+	  #statBusy := false;
+	  #error := true;
+	  
+	  #statReadRecordRequest := false;
+	END_IF;
+	#busy := #statBusy;
+END_FUNCTION_BLOCK
+

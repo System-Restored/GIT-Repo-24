@@ -1,0 +1,21 @@
+﻿FUNCTION "EnS_Adv_CycInt200msFC" : Void
+TITLE = FC for advanced data in cyclic interrupt OB
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Siemens
+FAMILY : EnS
+VERSION : 1.0
+//FC for advanced data in cyclic interrupt OB
+
+BEGIN
+	
+	//Advanced data collection 
+	"InfeedPAC3200_Adv"(energyMeta := "InfeedPAC3200".energyMeta,
+	                    orgData := "EnS_Org_CycInt200ms".orgData,
+	                    advData := "pac3200_Adv_InfeedPAC3200".advData);
+	
+	//Advanced min/max data collection
+	"InfeedPAC3200_AdvMinMax"(advDataMin := "pac3200_AdvMinMax_InfeedPAC3200".advDataMin,
+	                          advDataMax := "pac3200_AdvMinMax_InfeedPAC3200".advDataMax);
+	
+END_FUNCTION
+

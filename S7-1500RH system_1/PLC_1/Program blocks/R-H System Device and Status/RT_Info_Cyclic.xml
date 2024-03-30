@@ -1,0 +1,1924 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V19" />
+  <SW.Blocks.OB ID="0">
+    <AttributeList>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+  <Section Name="Input">
+    <Member Name="Initial_Call" Datatype="Bool" Informative="true">
+      <Comment>
+        <MultiLanguageText Lang="en-US">Initial call of this OB</MultiLanguageText>
+      </Comment>
+    </Member>
+    <Member Name="Event_Count" Datatype="Int" Informative="true">
+      <Comment>
+        <MultiLanguageText Lang="en-US">Events discarded</MultiLanguageText>
+      </Comment>
+    </Member>
+  </Section>
+  <Section Name="Temp" />
+  <Section Name="Constant">
+    <Member Name="constRunSoloState" Datatype="Int">
+      <StartValue>37</StartValue>
+    </Member>
+    <Member Name="constRunRedundant" Datatype="Int">
+      <StartValue>40</StartValue>
+    </Member>
+  </Section>
+</Sections></Interface>
+      <MemoryLayout>Optimized</MemoryLayout>
+      <Name>RT_Info_Cyclic</Name>
+      <Namespace />
+      <Number>30</Number>
+      <ProgrammingLanguage>LAD</ProgrammingLanguage>
+      <SecondaryType>CyclicInterrupt</SecondaryType>
+      <SetENOAutomatically>false</SetENOAutomatically>
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="3" CompositionName="Items">
+            <AttributeList>
+              <Culture>de-DE</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <SW.Blocks.CompileUnit ID="4" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="RTInfo" />
+        <Component Name="Mode" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="RTInfo" />
+        <Component Name="OBnumber" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="RTInfo" />
+        <Component Name="Info_LTIME" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="RTInfo" />
+        <Component Name="RetVal" />
+      </Symbol>
+    </Access>
+    <Part Name="RT_INFO" Version="1.2" UId="25" />
+  </Parts>
+  <Wires>
+    <Wire UId="26">
+      <Powerrail />
+      <NameCon UId="25" Name="en" />
+    </Wire>
+    <Wire UId="27">
+      <IdentCon UId="21" />
+      <NameCon UId="25" Name="MODE" />
+    </Wire>
+    <Wire UId="28">
+      <IdentCon UId="22" />
+      <NameCon UId="25" Name="OB" />
+    </Wire>
+    <Wire UId="29">
+      <IdentCon UId="23" />
+      <NameCon UId="25" Name="INFO" />
+    </Wire>
+    <Wire UId="30">
+      <NameCon UId="25" Name="Ret_Val" />
+      <IdentCon UId="24" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="5" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="6" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Used to find the specific runtime of an OB, change the OB number and see the INFO. </Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="7" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="8" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="9" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>RT_Info for specific OB</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="A" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="B" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+  <Parts>
+    <Access Scope="GlobalConstant" UId="21">
+      <Constant Name="switch_1~SCALANCE_interface_1~Port_7" />
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="Clock_1Hz" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalConstant" UId="23">
+      <Constant Name="switch_1~SCALANCE_interface_1~Port_8" />
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="Clock_1Hz" />
+      </Symbol>
+    </Access>
+    <Call UId="25">
+      <CallInfo Name="PN Port Status" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="26">
+          <Component Name="Switch1_P7_PNPortStatus_DB" />
+        </Instance>
+        <Parameter Name="HW_ID" Section="Input" Type="HW_IO" />
+        <Parameter Name="Update" Section="Input" Type="Bool" />
+        <Parameter Name="Connected" Section="Output" Type="Bool" />
+      </CallInfo>
+    </Call>
+    <Call UId="27">
+      <CallInfo Name="PN Port Status" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="28">
+          <Component Name="Switch1P8_PNPortStatus_DB" />
+        </Instance>
+        <Parameter Name="HW_ID" Section="Input" Type="HW_IO" />
+        <Parameter Name="Update" Section="Input" Type="Bool" />
+        <Parameter Name="Connected" Section="Output" Type="Bool" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="31">
+      <Powerrail />
+      <NameCon UId="25" Name="en" />
+      <NameCon UId="27" Name="en" />
+    </Wire>
+    <Wire UId="32">
+      <IdentCon UId="21" />
+      <NameCon UId="25" Name="HW_ID" />
+    </Wire>
+    <Wire UId="33">
+      <IdentCon UId="22" />
+      <NameCon UId="25" Name="Update" />
+    </Wire>
+    <Wire UId="34">
+      <NameCon UId="25" Name="Connected" />
+      <OpenCon UId="29" />
+    </Wire>
+    <Wire UId="35">
+      <IdentCon UId="23" />
+      <NameCon UId="27" Name="HW_ID" />
+    </Wire>
+    <Wire UId="36">
+      <IdentCon UId="24" />
+      <NameCon UId="27" Name="Update" />
+    </Wire>
+    <Wire UId="37">
+      <NameCon UId="27" Name="Connected" />
+      <OpenCon UId="30" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="C" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="D" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Example of Report back the status of the copper link use the extension from the DB .Connected where you need status of connection for the port. Here the HW_ID of the port can be found in the device view>properties>System constants tab</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="E" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="F" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="10" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Read XC208 ring connection status of the switches across a span</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="11" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="12" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+  <Parts>
+    <Access Scope="GlobalConstant" UId="21">
+      <Constant Name="PNPN_Coupler_X1~IODevice" />
+    </Access>
+    <Access Scope="GlobalConstant" UId="22">
+      <Constant Name="PNPN_Coupler_2_X1~IODevice" />
+    </Access>
+    <Call UId="23">
+      <CallInfo Name="fbGetDiagPnPnCouplerDiag" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="24">
+          <Component Name="fbPnPnLeftCouplerDiag_DB" />
+        </Instance>
+        <Parameter Name="LADDR" Section="Input" Type="HW_ANY" />
+        <Parameter Name="DebounceTimer" Section="Input" Type="Time" />
+        <Parameter Name="OwnState" Section="Output" Type="UInt" />
+        <Parameter Name="SubordinateState" Section="Output" Type="UInt" />
+        <Parameter Name="DeviceStatusOk" Section="Output" Type="Bool" />
+      </CallInfo>
+    </Call>
+    <Call UId="25">
+      <CallInfo Name="fbGetDiagPnPnCouplerDiag" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="26">
+          <Component Name="fbPnPnCouplerRightDiag_DB" />
+        </Instance>
+        <Parameter Name="LADDR" Section="Input" Type="HW_ANY" />
+        <Parameter Name="DebounceTimer" Section="Input" Type="Time" />
+        <Parameter Name="OwnState" Section="Output" Type="UInt" />
+        <Parameter Name="SubordinateState" Section="Output" Type="UInt" />
+        <Parameter Name="DeviceStatusOk" Section="Output" Type="Bool" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="35">
+      <Powerrail />
+      <NameCon UId="23" Name="en" />
+    </Wire>
+    <Wire UId="36">
+      <IdentCon UId="21" />
+      <NameCon UId="23" Name="LADDR" />
+    </Wire>
+    <Wire UId="37">
+      <OpenCon UId="27" />
+      <NameCon UId="23" Name="DebounceTimer" />
+    </Wire>
+    <Wire UId="38">
+      <NameCon UId="23" Name="eno" />
+      <NameCon UId="25" Name="en" />
+    </Wire>
+    <Wire UId="39">
+      <NameCon UId="23" Name="OwnState" />
+      <OpenCon UId="28" />
+    </Wire>
+    <Wire UId="40">
+      <NameCon UId="23" Name="SubordinateState" />
+      <OpenCon UId="29" />
+    </Wire>
+    <Wire UId="41">
+      <NameCon UId="23" Name="DeviceStatusOk" />
+      <OpenCon UId="30" />
+    </Wire>
+    <Wire UId="42">
+      <IdentCon UId="22" />
+      <NameCon UId="25" Name="LADDR" />
+    </Wire>
+    <Wire UId="43">
+      <OpenCon UId="31" />
+      <NameCon UId="25" Name="DebounceTimer" />
+    </Wire>
+    <Wire UId="44">
+      <NameCon UId="25" Name="OwnState" />
+      <OpenCon UId="32" />
+    </Wire>
+    <Wire UId="45">
+      <NameCon UId="25" Name="SubordinateState" />
+      <OpenCon UId="33" />
+    </Wire>
+    <Wire UId="46">
+      <NameCon UId="25" Name="DeviceStatusOk" />
+      <OpenCon UId="34" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="13" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="14" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="15" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="16" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="17" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>PnPnCoupler Left and Right Get Diag to see if Device is found on both main module and sub module across the route</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="18" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="19" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+  <Parts>
+    <Access Scope="GlobalConstant" UId="21">
+      <Constant Name="Local1~HCPUredCtrl" />
+    </Access>
+    <Access Scope="GlobalConstant" UId="22">
+      <Constant Name="Local2~HCPUredCtrl" />
+    </Access>
+    <Access Scope="GlobalConstant" UId="23">
+      <Constant Name="Local1~RHSystem" />
+    </Access>
+    <Access Scope="GlobalConstant" UId="24">
+      <Constant Name="Local1~PROFINET_interface_1" />
+    </Access>
+    <Access Scope="GlobalConstant" UId="25">
+      <Constant Name="Local2~PROFINET_interface_1" />
+    </Access>
+    <Access Scope="GlobalVariable" UId="26">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="PLC Mode" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="PLC Near Status" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="28">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="PLC Far Status" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="29">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="OperationStateSystem" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="30">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="MRPRingState" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="31">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="PLC Mode" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="32">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="PLC Near Status" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="33">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="PLC Far Status" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="34">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="OperationStateSystem" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="35">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="MRPRingState" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="36">
+      <Symbol>
+        <Component Name="hmiDatatransferTP1200" />
+        <Component Name="plcStopMonitoring" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="37">
+      <Symbol>
+        <Component Name="hmiDatatransferTP1200" />
+        <Component Name="plcOperationState" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="38">
+      <Symbol>
+        <Component Name="hmiDatatransferTP1200" />
+        <Component Name="plcMrpState" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="39">
+      <Symbol>
+        <Component Name="hmiDatatransferTP1200" />
+        <Component Name="plc1LedState" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="40">
+      <Symbol>
+        <Component Name="hmiDatatransferTP1200" />
+        <Component Name="plc2LedState" />
+      </Symbol>
+    </Access>
+    <Call UId="41">
+      <CallInfo Name="R_H_Sys_Status" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="42">
+          <Component Name="R_H_Sys_Status_DB" />
+        </Instance>
+        <Parameter Name="laddrPLC1" Section="Input" Type="HW_ANY" />
+        <Parameter Name="laddrPLC2" Section="Input" Type="HW_ANY" />
+        <Parameter Name="laddrSystem" Section="Input" Type="HW_ANY" />
+        <Parameter Name="laddrProfinetPLC1" Section="Input" Type="HW_ANY" />
+        <Parameter Name="laddrProfinetPLC2" Section="Input" Type="HW_ANY" />
+        <Parameter Name="primaryId" Section="Output" Type="Int" />
+        <Parameter Name="operationStatePLC1" Section="Output" Type="UInt" />
+        <Parameter Name="operationStatePLC2" Section="Output" Type="UInt" />
+        <Parameter Name="operationStateSystem" Section="Output" Type="UInt" />
+        <Parameter Name="mrpRingState" Section="Output" Type="UInt" />
+      </CallInfo>
+    </Call>
+    <Call UId="43">
+      <CallInfo Name="plcStateEvaluation" BlockType="FB">
+        <Instance Scope="GlobalVariable" UId="44">
+          <Component Name="plcStateEvaluation_DB_1" />
+        </Instance>
+        <Parameter Name="primaryID" Section="Input" Type="Int" />
+        <Parameter Name="plc1OperationState" Section="Input" Type="UInt" />
+        <Parameter Name="plc2OperationState" Section="Input" Type="UInt" />
+        <Parameter Name="plcOperationStateSystem" Section="Input" Type="UInt" />
+        <Parameter Name="plcMrpRingState" Section="Input" Type="UInt" />
+        <Parameter Name="PLC_OperateStatus" Section="Output" Type="Int" />
+        <Parameter Name="PLC_MrpState" Section="Output" Type="Int" />
+        <Parameter Name="PLC1_LEDStatus" Section="Output" Type="Int" />
+        <Parameter Name="PLC2_LEDStatus" Section="Output" Type="Int" />
+        <Parameter Name="PLC12_StopMonitoring" Section="InOut" Type="Int" />
+      </CallInfo>
+    </Call>
+  </Parts>
+  <Wires>
+    <Wire UId="45">
+      <Powerrail />
+      <NameCon UId="41" Name="en" />
+    </Wire>
+    <Wire UId="46">
+      <IdentCon UId="21" />
+      <NameCon UId="41" Name="laddrPLC1" />
+    </Wire>
+    <Wire UId="47">
+      <IdentCon UId="22" />
+      <NameCon UId="41" Name="laddrPLC2" />
+    </Wire>
+    <Wire UId="48">
+      <IdentCon UId="23" />
+      <NameCon UId="41" Name="laddrSystem" />
+    </Wire>
+    <Wire UId="49">
+      <IdentCon UId="24" />
+      <NameCon UId="41" Name="laddrProfinetPLC1" />
+    </Wire>
+    <Wire UId="50">
+      <IdentCon UId="25" />
+      <NameCon UId="41" Name="laddrProfinetPLC2" />
+    </Wire>
+    <Wire UId="51">
+      <NameCon UId="41" Name="eno" />
+      <NameCon UId="43" Name="en" />
+    </Wire>
+    <Wire UId="52">
+      <NameCon UId="41" Name="primaryId" />
+      <IdentCon UId="26" />
+    </Wire>
+    <Wire UId="53">
+      <NameCon UId="41" Name="operationStatePLC1" />
+      <IdentCon UId="27" />
+    </Wire>
+    <Wire UId="54">
+      <NameCon UId="41" Name="operationStatePLC2" />
+      <IdentCon UId="28" />
+    </Wire>
+    <Wire UId="55">
+      <NameCon UId="41" Name="operationStateSystem" />
+      <IdentCon UId="29" />
+    </Wire>
+    <Wire UId="56">
+      <NameCon UId="41" Name="mrpRingState" />
+      <IdentCon UId="30" />
+    </Wire>
+    <Wire UId="57">
+      <IdentCon UId="31" />
+      <NameCon UId="43" Name="primaryID" />
+    </Wire>
+    <Wire UId="58">
+      <IdentCon UId="32" />
+      <NameCon UId="43" Name="plc1OperationState" />
+    </Wire>
+    <Wire UId="59">
+      <IdentCon UId="33" />
+      <NameCon UId="43" Name="plc2OperationState" />
+    </Wire>
+    <Wire UId="60">
+      <IdentCon UId="34" />
+      <NameCon UId="43" Name="plcOperationStateSystem" />
+    </Wire>
+    <Wire UId="61">
+      <IdentCon UId="35" />
+      <NameCon UId="43" Name="plcMrpRingState" />
+    </Wire>
+    <Wire UId="62">
+      <IdentCon UId="36" />
+      <NameCon UId="43" Name="PLC12_StopMonitoring" />
+    </Wire>
+    <Wire UId="63">
+      <NameCon UId="43" Name="PLC_OperateStatus" />
+      <IdentCon UId="37" />
+    </Wire>
+    <Wire UId="64">
+      <NameCon UId="43" Name="PLC_MrpState" />
+      <IdentCon UId="38" />
+    </Wire>
+    <Wire UId="65">
+      <NameCon UId="43" Name="PLC1_LEDStatus" />
+      <IdentCon UId="39" />
+    </Wire>
+    <Wire UId="66">
+      <NameCon UId="43" Name="PLC2_LEDStatus" />
+      <IdentCon UId="40" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="1A" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="1B" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Best to place this near and scan right before the RH CNTRL and evaluate PLC State for transfer to faceplate in Advanced Runtime</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="1C" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="1D" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="1E" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>R_H_Sys_Status HMI status for redundant system operation</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="1F" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="20" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_StopPrimary" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_FullSwapSequence" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_SynchUp" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SyncSequenceFlag" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="25">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_StopPrimary" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="26">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_FullSwapSequence" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_StopPrimary" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="28">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_SynchUp" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="29">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_FullSwapSequence" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="30">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_PrimaryStop" />
+        <Component Name="REQ" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="31">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_PrimaryStop" />
+        <Component Name="REQ" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="32">
+      <Constant>
+        <ConstantType>Byte</ConstantType>
+        <ConstantValue>8</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="33">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_PrimaryStop" />
+        <Component Name="Ret_Val" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="34">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_PrimaryStop" />
+        <Component Name="Busy" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="35">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_PrimaryStop" />
+        <Component Name="REQ" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="36">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_PrimaryStop" />
+        <Component Name="Busy" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="37">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="StopPrimary_Retry_Busy" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="38">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_PrimaryStop" />
+        <Component Name="REQ" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="39">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_StopPrimary" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="40">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_FullSwapSequence" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="41">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_PrimaryStop" />
+        <Component Name="REQ" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="42">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SyncSequenceFlag" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="43">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_FullSwapSequence" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="44">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_StopPrimary" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="45">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_FullSwapSequence" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="46">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_PrimaryStop" />
+        <Component Name="Busy" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="47">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="StopPrimary_Retry_Busy" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="48">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_PrimaryStop" />
+        <Component Name="Busy" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="49">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="StopPrimary_Retry_Busy" />
+      </Symbol>
+    </Access>
+    <Part Name="Contact" UId="50" />
+    <Part Name="Contact" UId="51">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="Contact" UId="52">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="Contact" UId="53">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="SCoil" UId="54" />
+    <Part Name="Contact" UId="55" />
+    <Part Name="Contact" UId="56">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="Contact" UId="57">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="SCoil" UId="58" />
+    <Part Name="O" UId="59">
+      <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
+    </Part>
+    <Part Name="SCoil" UId="60" />
+    <Part Name="RH_CTRL" Version="1.0" UId="61" />
+    <Part Name="Contact" UId="62" />
+    <Part Name="Contact" UId="63">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="RCoil" UId="64" />
+    <Part Name="RCoil" UId="65" />
+    <Part Name="RCoil" UId="66" />
+    <Part Name="Contact" UId="67" />
+    <Part Name="RCoil" UId="68" />
+    <Part Name="SCoil" UId="69" />
+    <Part Name="RCoil" UId="70" />
+    <Part Name="Contact" UId="71" />
+    <Part Name="Contact" UId="72" />
+    <Part Name="O" UId="73">
+      <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
+    </Part>
+    <Part Name="Contact" UId="74" />
+    <Part Name="SCoil" UId="75" />
+    <Part Name="Contact" UId="76">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="RCoil" UId="77" />
+  </Parts>
+  <Wires>
+    <Wire UId="79">
+      <Powerrail />
+      <NameCon UId="50" Name="in" />
+      <NameCon UId="55" Name="in" />
+      <NameCon UId="61" Name="en" />
+      <NameCon UId="62" Name="in" />
+      <NameCon UId="71" Name="in" />
+      <NameCon UId="72" Name="in" />
+    </Wire>
+    <Wire UId="80">
+      <IdentCon UId="21" />
+      <NameCon UId="50" Name="operand" />
+    </Wire>
+    <Wire UId="81">
+      <NameCon UId="50" Name="out" />
+      <NameCon UId="51" Name="in" />
+    </Wire>
+    <Wire UId="82">
+      <IdentCon UId="22" />
+      <NameCon UId="51" Name="operand" />
+    </Wire>
+    <Wire UId="83">
+      <NameCon UId="51" Name="out" />
+      <NameCon UId="52" Name="in" />
+    </Wire>
+    <Wire UId="84">
+      <IdentCon UId="23" />
+      <NameCon UId="52" Name="operand" />
+    </Wire>
+    <Wire UId="85">
+      <NameCon UId="52" Name="out" />
+      <NameCon UId="53" Name="in" />
+    </Wire>
+    <Wire UId="86">
+      <IdentCon UId="24" />
+      <NameCon UId="53" Name="operand" />
+    </Wire>
+    <Wire UId="87">
+      <NameCon UId="53" Name="out" />
+      <NameCon UId="54" Name="in" />
+    </Wire>
+    <Wire UId="88">
+      <IdentCon UId="25" />
+      <NameCon UId="54" Name="operand" />
+    </Wire>
+    <Wire UId="89">
+      <NameCon UId="54" Name="out" />
+      <NameCon UId="59" Name="in1" />
+    </Wire>
+    <Wire UId="90">
+      <IdentCon UId="26" />
+      <NameCon UId="55" Name="operand" />
+    </Wire>
+    <Wire UId="91">
+      <NameCon UId="55" Name="out" />
+      <NameCon UId="56" Name="in" />
+    </Wire>
+    <Wire UId="92">
+      <IdentCon UId="27" />
+      <NameCon UId="56" Name="operand" />
+    </Wire>
+    <Wire UId="93">
+      <NameCon UId="56" Name="out" />
+      <NameCon UId="57" Name="in" />
+    </Wire>
+    <Wire UId="94">
+      <IdentCon UId="28" />
+      <NameCon UId="57" Name="operand" />
+    </Wire>
+    <Wire UId="95">
+      <NameCon UId="57" Name="out" />
+      <NameCon UId="58" Name="in" />
+    </Wire>
+    <Wire UId="96">
+      <IdentCon UId="29" />
+      <NameCon UId="58" Name="operand" />
+    </Wire>
+    <Wire UId="97">
+      <NameCon UId="58" Name="out" />
+      <NameCon UId="59" Name="in2" />
+    </Wire>
+    <Wire UId="98">
+      <NameCon UId="59" Name="out" />
+      <NameCon UId="60" Name="in" />
+    </Wire>
+    <Wire UId="99">
+      <IdentCon UId="30" />
+      <NameCon UId="60" Name="operand" />
+    </Wire>
+    <Wire UId="100">
+      <IdentCon UId="31" />
+      <NameCon UId="61" Name="REQ" />
+    </Wire>
+    <Wire UId="101">
+      <IdentCon UId="32" />
+      <NameCon UId="61" Name="Mode" />
+    </Wire>
+    <Wire UId="102">
+      <OpenCon UId="78" />
+      <NameCon UId="61" Name="Submode" />
+    </Wire>
+    <Wire UId="103">
+      <NameCon UId="61" Name="Ret_Val" />
+      <IdentCon UId="33" />
+    </Wire>
+    <Wire UId="104">
+      <NameCon UId="61" Name="Busy" />
+      <IdentCon UId="34" />
+    </Wire>
+    <Wire UId="105">
+      <IdentCon UId="35" />
+      <NameCon UId="62" Name="operand" />
+    </Wire>
+    <Wire UId="106">
+      <NameCon UId="62" Name="out" />
+      <NameCon UId="63" Name="in" />
+    </Wire>
+    <Wire UId="107">
+      <IdentCon UId="36" />
+      <NameCon UId="63" Name="operand" />
+    </Wire>
+    <Wire UId="108">
+      <NameCon UId="63" Name="out" />
+      <NameCon UId="64" Name="in" />
+    </Wire>
+    <Wire UId="109">
+      <IdentCon UId="37" />
+      <NameCon UId="64" Name="operand" />
+    </Wire>
+    <Wire UId="110">
+      <NameCon UId="64" Name="out" />
+      <NameCon UId="65" Name="in" />
+    </Wire>
+    <Wire UId="111">
+      <IdentCon UId="38" />
+      <NameCon UId="65" Name="operand" />
+    </Wire>
+    <Wire UId="112">
+      <NameCon UId="65" Name="out" />
+      <NameCon UId="66" Name="in" />
+    </Wire>
+    <Wire UId="113">
+      <IdentCon UId="39" />
+      <NameCon UId="66" Name="operand" />
+    </Wire>
+    <Wire UId="114">
+      <NameCon UId="66" Name="out" />
+      <NameCon UId="67" Name="in" />
+    </Wire>
+    <Wire UId="115">
+      <IdentCon UId="40" />
+      <NameCon UId="67" Name="operand" />
+    </Wire>
+    <Wire UId="116">
+      <NameCon UId="67" Name="out" />
+      <NameCon UId="68" Name="in" />
+    </Wire>
+    <Wire UId="117">
+      <IdentCon UId="41" />
+      <NameCon UId="68" Name="operand" />
+    </Wire>
+    <Wire UId="118">
+      <NameCon UId="68" Name="out" />
+      <NameCon UId="69" Name="in" />
+    </Wire>
+    <Wire UId="119">
+      <IdentCon UId="42" />
+      <NameCon UId="69" Name="operand" />
+    </Wire>
+    <Wire UId="120">
+      <NameCon UId="69" Name="out" />
+      <NameCon UId="70" Name="in" />
+    </Wire>
+    <Wire UId="121">
+      <IdentCon UId="43" />
+      <NameCon UId="70" Name="operand" />
+    </Wire>
+    <Wire UId="122">
+      <IdentCon UId="44" />
+      <NameCon UId="71" Name="operand" />
+    </Wire>
+    <Wire UId="123">
+      <NameCon UId="71" Name="out" />
+      <NameCon UId="73" Name="in1" />
+    </Wire>
+    <Wire UId="124">
+      <IdentCon UId="45" />
+      <NameCon UId="72" Name="operand" />
+    </Wire>
+    <Wire UId="125">
+      <NameCon UId="72" Name="out" />
+      <NameCon UId="73" Name="in2" />
+    </Wire>
+    <Wire UId="126">
+      <NameCon UId="73" Name="out" />
+      <NameCon UId="74" Name="in" />
+      <NameCon UId="76" Name="in" />
+    </Wire>
+    <Wire UId="127">
+      <IdentCon UId="46" />
+      <NameCon UId="74" Name="operand" />
+    </Wire>
+    <Wire UId="128">
+      <NameCon UId="74" Name="out" />
+      <NameCon UId="75" Name="in" />
+    </Wire>
+    <Wire UId="129">
+      <IdentCon UId="47" />
+      <NameCon UId="75" Name="operand" />
+    </Wire>
+    <Wire UId="130">
+      <IdentCon UId="48" />
+      <NameCon UId="76" Name="operand" />
+    </Wire>
+    <Wire UId="131">
+      <NameCon UId="76" Name="out" />
+      <NameCon UId="77" Name="in" />
+    </Wire>
+    <Wire UId="132">
+      <IdentCon UId="49" />
+      <NameCon UId="77" Name="operand" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="21" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="22" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Self Latching Sequence using FullSwap Sequence tag, independent function with REQ tag
+Used to trigger Primary Stop based on input from stop primary and full swap boolean tag;
+ positive edge triggered instruction RH_CTRL below.
+This network uses a Primary stop request, and evaluates if the RH_CTRL is busy before 
+changing the mode or moving on to the next step.
+The Retry_Busy tag is used to record if a Busy bit was in place while being triggered to prevent moving
+ mode during middle of RH_CTRL operation.
+
+Modes:
+3: Disable execution of the SYNCUP
+4: Re-enable execution of the SYNCUP
+7: Request SYNCUP system state 
+8: Request STOP of the primary CPU
+9: Request STOP of the backup CPU
+
+Use mode 8 to stop the primary PLC, then use Mode 7 to Synch the primary and backup.</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="23" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="24" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="25" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Trigger primary stop RH_CNTRL</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="26" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="27" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_SynchUp" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_StopPrimary" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_FullSwapSequence" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SyncSequenceFlag" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="25">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_SynchUp" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="26">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SyncSequenceFlag" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="27">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="OperationStateSystem" />
+      </Symbol>
+    </Access>
+    <Access Scope="LocalConstant" UId="28">
+      <Constant Name="constRunSoloState" />
+    </Access>
+    <Access Scope="TypedConstant" UId="29">
+      <Constant>
+        <ConstantValue>t#500ms</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="30">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_SyncUp" />
+        <Component Name="REQ" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="31">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_SyncUp" />
+        <Component Name="REQ" />
+      </Symbol>
+    </Access>
+    <Access Scope="LiteralConstant" UId="32">
+      <Constant>
+        <ConstantType>Byte</ConstantType>
+        <ConstantValue>7</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="33">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_SyncUp" />
+        <Component Name="Ret_Val" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="34">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_SyncUp" />
+        <Component Name="Busy" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="35">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_SyncUp" />
+        <Component Name="REQ" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="36">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_SyncUp" />
+        <Component Name="Busy" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="37">
+      <Symbol>
+        <Component Name="DB_HMI Support" />
+        <Component Name="OperationStateSystem" />
+      </Symbol>
+    </Access>
+    <Access Scope="LocalConstant" UId="38">
+      <Constant Name="constRunRedundant" />
+    </Access>
+    <Access Scope="GlobalVariable" UId="39">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_SyncUp" />
+        <Component Name="REQ" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="40">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_SynchUp" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="41">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SyncSequenceFlag" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="42">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SyncSequenceFlag" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="43">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_SynchUp" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="44">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SyncSequenceFlag" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="45">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_SyncUp" />
+        <Component Name="Busy" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="46">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SynchUp_Retry_Busy" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="47">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="RH_CTRL_SyncUp" />
+        <Component Name="Busy" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="48">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="StopPrimary_Retry_Busy" />
+      </Symbol>
+    </Access>
+    <Part Name="Contact" UId="49" />
+    <Part Name="Contact" UId="50">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="Contact" UId="51">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="Contact" UId="52">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="SCoil" UId="53" />
+    <Part Name="Contact" UId="54" />
+    <Part Name="Eq" UId="55">
+      <TemplateValue Name="SrcType" Type="Type">Int</TemplateValue>
+    </Part>
+    <Part Name="TON" Version="1.0" UId="56">
+      <Instance Scope="GlobalVariable" UId="57">
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SyncSequenceTimer" />
+      </Instance>
+      <TemplateValue Name="time_type" Type="Type">Time</TemplateValue>
+    </Part>
+    <Part Name="O" UId="58">
+      <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
+    </Part>
+    <Part Name="SCoil" UId="59" />
+    <Part Name="RH_CTRL" Version="1.0" UId="60" />
+    <Part Name="Contact" UId="61" />
+    <Part Name="Contact" UId="62">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="Eq" UId="63">
+      <TemplateValue Name="SrcType" Type="Type">Int</TemplateValue>
+    </Part>
+    <Part Name="RCoil" UId="64" />
+    <Part Name="RCoil" UId="65" />
+    <Part Name="Contact" UId="66" />
+    <Part Name="RCoil" UId="67" />
+    <Part Name="Contact" UId="68" />
+    <Part Name="Contact" UId="69" />
+    <Part Name="O" UId="70">
+      <TemplateValue Name="Card" Type="Cardinality">2</TemplateValue>
+    </Part>
+    <Part Name="Contact" UId="71" />
+    <Part Name="SCoil" UId="72" />
+    <Part Name="Contact" UId="73">
+      <Negated Name="operand" />
+    </Part>
+    <Part Name="RCoil" UId="74" />
+  </Parts>
+  <Wires>
+    <Wire UId="77">
+      <Powerrail />
+      <NameCon UId="49" Name="in" />
+      <NameCon UId="54" Name="in" />
+      <NameCon UId="60" Name="en" />
+      <NameCon UId="61" Name="in" />
+      <NameCon UId="68" Name="in" />
+      <NameCon UId="69" Name="in" />
+    </Wire>
+    <Wire UId="78">
+      <IdentCon UId="21" />
+      <NameCon UId="49" Name="operand" />
+    </Wire>
+    <Wire UId="79">
+      <NameCon UId="49" Name="out" />
+      <NameCon UId="50" Name="in" />
+    </Wire>
+    <Wire UId="80">
+      <IdentCon UId="22" />
+      <NameCon UId="50" Name="operand" />
+    </Wire>
+    <Wire UId="81">
+      <NameCon UId="50" Name="out" />
+      <NameCon UId="51" Name="in" />
+    </Wire>
+    <Wire UId="82">
+      <IdentCon UId="23" />
+      <NameCon UId="51" Name="operand" />
+    </Wire>
+    <Wire UId="83">
+      <NameCon UId="51" Name="out" />
+      <NameCon UId="52" Name="in" />
+    </Wire>
+    <Wire UId="84">
+      <IdentCon UId="24" />
+      <NameCon UId="52" Name="operand" />
+    </Wire>
+    <Wire UId="85">
+      <NameCon UId="52" Name="out" />
+      <NameCon UId="53" Name="in" />
+    </Wire>
+    <Wire UId="86">
+      <IdentCon UId="25" />
+      <NameCon UId="53" Name="operand" />
+    </Wire>
+    <Wire UId="87">
+      <NameCon UId="53" Name="out" />
+      <NameCon UId="58" Name="in1" />
+    </Wire>
+    <Wire UId="88">
+      <IdentCon UId="26" />
+      <NameCon UId="54" Name="operand" />
+    </Wire>
+    <Wire UId="89">
+      <NameCon UId="54" Name="out" />
+      <NameCon UId="55" Name="pre" />
+    </Wire>
+    <Wire UId="90">
+      <IdentCon UId="27" />
+      <NameCon UId="55" Name="in1" />
+    </Wire>
+    <Wire UId="91">
+      <IdentCon UId="28" />
+      <NameCon UId="55" Name="in2" />
+    </Wire>
+    <Wire UId="92">
+      <NameCon UId="55" Name="out" />
+      <NameCon UId="56" Name="IN" />
+    </Wire>
+    <Wire UId="93">
+      <IdentCon UId="29" />
+      <NameCon UId="56" Name="PT" />
+    </Wire>
+    <Wire UId="94">
+      <NameCon UId="56" Name="Q" />
+      <NameCon UId="58" Name="in2" />
+    </Wire>
+    <Wire UId="95">
+      <NameCon UId="56" Name="ET" />
+      <OpenCon UId="75" />
+    </Wire>
+    <Wire UId="96">
+      <NameCon UId="58" Name="out" />
+      <NameCon UId="59" Name="in" />
+    </Wire>
+    <Wire UId="97">
+      <IdentCon UId="30" />
+      <NameCon UId="59" Name="operand" />
+    </Wire>
+    <Wire UId="98">
+      <IdentCon UId="31" />
+      <NameCon UId="60" Name="REQ" />
+    </Wire>
+    <Wire UId="99">
+      <IdentCon UId="32" />
+      <NameCon UId="60" Name="Mode" />
+    </Wire>
+    <Wire UId="100">
+      <OpenCon UId="76" />
+      <NameCon UId="60" Name="Submode" />
+    </Wire>
+    <Wire UId="101">
+      <NameCon UId="60" Name="Ret_Val" />
+      <IdentCon UId="33" />
+    </Wire>
+    <Wire UId="102">
+      <NameCon UId="60" Name="Busy" />
+      <IdentCon UId="34" />
+    </Wire>
+    <Wire UId="103">
+      <IdentCon UId="35" />
+      <NameCon UId="61" Name="operand" />
+    </Wire>
+    <Wire UId="104">
+      <NameCon UId="61" Name="out" />
+      <NameCon UId="62" Name="in" />
+    </Wire>
+    <Wire UId="105">
+      <IdentCon UId="36" />
+      <NameCon UId="62" Name="operand" />
+    </Wire>
+    <Wire UId="106">
+      <NameCon UId="62" Name="out" />
+      <NameCon UId="63" Name="pre" />
+    </Wire>
+    <Wire UId="107">
+      <IdentCon UId="37" />
+      <NameCon UId="63" Name="in1" />
+    </Wire>
+    <Wire UId="108">
+      <IdentCon UId="38" />
+      <NameCon UId="63" Name="in2" />
+    </Wire>
+    <Wire UId="109">
+      <NameCon UId="63" Name="out" />
+      <NameCon UId="64" Name="in" />
+    </Wire>
+    <Wire UId="110">
+      <IdentCon UId="39" />
+      <NameCon UId="64" Name="operand" />
+    </Wire>
+    <Wire UId="111">
+      <NameCon UId="64" Name="out" />
+      <NameCon UId="65" Name="in" />
+    </Wire>
+    <Wire UId="112">
+      <IdentCon UId="40" />
+      <NameCon UId="65" Name="operand" />
+    </Wire>
+    <Wire UId="113">
+      <NameCon UId="65" Name="out" />
+      <NameCon UId="66" Name="in" />
+    </Wire>
+    <Wire UId="114">
+      <IdentCon UId="41" />
+      <NameCon UId="66" Name="operand" />
+    </Wire>
+    <Wire UId="115">
+      <NameCon UId="66" Name="out" />
+      <NameCon UId="67" Name="in" />
+    </Wire>
+    <Wire UId="116">
+      <IdentCon UId="42" />
+      <NameCon UId="67" Name="operand" />
+    </Wire>
+    <Wire UId="117">
+      <IdentCon UId="43" />
+      <NameCon UId="68" Name="operand" />
+    </Wire>
+    <Wire UId="118">
+      <NameCon UId="68" Name="out" />
+      <NameCon UId="70" Name="in1" />
+    </Wire>
+    <Wire UId="119">
+      <IdentCon UId="44" />
+      <NameCon UId="69" Name="operand" />
+    </Wire>
+    <Wire UId="120">
+      <NameCon UId="69" Name="out" />
+      <NameCon UId="70" Name="in2" />
+    </Wire>
+    <Wire UId="121">
+      <NameCon UId="70" Name="out" />
+      <NameCon UId="71" Name="in" />
+      <NameCon UId="73" Name="in" />
+    </Wire>
+    <Wire UId="122">
+      <IdentCon UId="45" />
+      <NameCon UId="71" Name="operand" />
+    </Wire>
+    <Wire UId="123">
+      <NameCon UId="71" Name="out" />
+      <NameCon UId="72" Name="in" />
+    </Wire>
+    <Wire UId="124">
+      <IdentCon UId="46" />
+      <NameCon UId="72" Name="operand" />
+    </Wire>
+    <Wire UId="125">
+      <IdentCon UId="47" />
+      <NameCon UId="73" Name="operand" />
+    </Wire>
+    <Wire UId="126">
+      <NameCon UId="73" Name="out" />
+      <NameCon UId="74" Name="in" />
+    </Wire>
+    <Wire UId="127">
+      <IdentCon UId="48" />
+      <NameCon UId="74" Name="operand" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="28" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="29" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Self Latching Sequence using FullSwap Sequence tag, independent function with REQ tag
+Used to trigger Sync up; positive edge triggered instruction RH_CTRL below
+Sequence can also be triggered by Full sequence request which can set the SyncSequenceFlag below
+SyncSequence Flag is help for next step until run Run-Solo status is reported
+ positive edge triggered instruction RH_CTRL below
+This network uses a synch up request, and evaluates if the RH_CTRL is busy before changing the mode
+The Retry_Busy tag is used to record if a Busy bit was in place while being triggered to prevent moving
+ mode during middle of RH_CTRL operation
+
+Modes:
+3: Disable execution of the SYNCUP
+4: Re-enable execution of the SYNCUP
+7: Request SYNCUP system state 
+8: Request STOP of the primary CPU
+9: Request STOP of the backup CPU
+
+Use mode 8 to stop the primary PLC, then use Mode 7 to Synch the primary and backup.</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="2A" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="2B" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="2C" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Trigger Synch up RH_CNTRL</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="2D" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="2E" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource><FlgNet xmlns="http://www.siemens.com/automation/Openness/SW/NetworkSource/FlgNet/v5">
+  <Parts>
+    <Access Scope="GlobalVariable" UId="21">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_StopPrimary" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="22">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_FullSwapSequence" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="23">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="REQ_SynchUp" />
+      </Symbol>
+    </Access>
+    <Access Scope="GlobalVariable" UId="24">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SyncSequenceFlag" />
+      </Symbol>
+    </Access>
+    <Access Scope="TypedConstant" UId="25">
+      <Constant>
+        <ConstantValue>t#80s</ConstantValue>
+      </Constant>
+    </Access>
+    <Access Scope="GlobalVariable" UId="26">
+      <Symbol>
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SequenceAlarm" />
+      </Symbol>
+    </Access>
+    <Part Name="Contact" UId="27" />
+    <Part Name="Contact" UId="28" />
+    <Part Name="Contact" UId="29" />
+    <Part Name="Contact" UId="30" />
+    <Part Name="O" UId="31">
+      <TemplateValue Name="Card" Type="Cardinality">4</TemplateValue>
+    </Part>
+    <Part Name="TON" Version="1.0" UId="32">
+      <Instance Scope="GlobalVariable" UId="33">
+        <Component Name="GlobalDB" />
+        <Component Name="Trigger_StopSynch" />
+        <Component Name="SequenceTimer" />
+      </Instance>
+      <TemplateValue Name="time_type" Type="Type">Time</TemplateValue>
+    </Part>
+    <Part Name="Coil" UId="34" />
+  </Parts>
+  <Wires>
+    <Wire UId="36">
+      <Powerrail />
+      <NameCon UId="27" Name="in" />
+      <NameCon UId="28" Name="in" />
+      <NameCon UId="29" Name="in" />
+      <NameCon UId="30" Name="in" />
+    </Wire>
+    <Wire UId="37">
+      <IdentCon UId="21" />
+      <NameCon UId="27" Name="operand" />
+    </Wire>
+    <Wire UId="38">
+      <NameCon UId="27" Name="out" />
+      <NameCon UId="31" Name="in1" />
+    </Wire>
+    <Wire UId="39">
+      <IdentCon UId="22" />
+      <NameCon UId="28" Name="operand" />
+    </Wire>
+    <Wire UId="40">
+      <NameCon UId="28" Name="out" />
+      <NameCon UId="31" Name="in2" />
+    </Wire>
+    <Wire UId="41">
+      <IdentCon UId="23" />
+      <NameCon UId="29" Name="operand" />
+    </Wire>
+    <Wire UId="42">
+      <NameCon UId="29" Name="out" />
+      <NameCon UId="31" Name="in3" />
+    </Wire>
+    <Wire UId="43">
+      <IdentCon UId="24" />
+      <NameCon UId="30" Name="operand" />
+    </Wire>
+    <Wire UId="44">
+      <NameCon UId="30" Name="out" />
+      <NameCon UId="31" Name="in4" />
+    </Wire>
+    <Wire UId="45">
+      <NameCon UId="31" Name="out" />
+      <NameCon UId="32" Name="IN" />
+    </Wire>
+    <Wire UId="46">
+      <IdentCon UId="25" />
+      <NameCon UId="32" Name="PT" />
+    </Wire>
+    <Wire UId="47">
+      <NameCon UId="32" Name="Q" />
+      <NameCon UId="34" Name="in" />
+    </Wire>
+    <Wire UId="48">
+      <NameCon UId="32" Name="ET" />
+      <OpenCon UId="35" />
+    </Wire>
+    <Wire UId="49">
+      <IdentCon UId="26" />
+      <NameCon UId="34" Name="operand" />
+    </Wire>
+  </Wires>
+</FlgNet></NetworkSource>
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="2F" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="30" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="31" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="32" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="33" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text>Timer to detect if sequence takes more than alotted time RH_CTRL</Text>
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="34" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <SW.Blocks.CompileUnit ID="35" CompositionName="CompileUnits">
+        <AttributeList>
+          <NetworkSource />
+          <ProgrammingLanguage>LAD</ProgrammingLanguage>
+        </AttributeList>
+        <ObjectList>
+          <MultilingualText ID="36" CompositionName="Comment">
+            <ObjectList>
+              <MultilingualTextItem ID="37" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="38" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+          <MultilingualText ID="39" CompositionName="Title">
+            <ObjectList>
+              <MultilingualTextItem ID="3A" CompositionName="Items">
+                <AttributeList>
+                  <Culture>en-US</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+              <MultilingualTextItem ID="3B" CompositionName="Items">
+                <AttributeList>
+                  <Culture>de-DE</Culture>
+                  <Text />
+                </AttributeList>
+              </MultilingualTextItem>
+            </ObjectList>
+          </MultilingualText>
+        </ObjectList>
+      </SW.Blocks.CompileUnit>
+      <MultilingualText ID="3C" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="3D" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+          <MultilingualTextItem ID="3E" CompositionName="Items">
+            <AttributeList>
+              <Culture>de-DE</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Blocks.OB>
+</Document>

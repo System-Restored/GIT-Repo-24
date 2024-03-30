@@ -1,0 +1,27 @@
+﻿FUNCTION "EnS_Basic_CycInt1sFC" : Void
+TITLE = FC for basic data of measuring points in cyclic interrupt OB
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Siemens
+FAMILY : EnS
+VERSION : 1.0
+//FC for basic data of measuring points in cyclic interrupt OB
+
+BEGIN
+	
+	//Basic energy data
+	//Calculation and data collection of periodic accumulated energy and average power
+	"EnS_Calc_InfeedPAC3200"(power := "pac3200_InfeedPAC3200".power,
+	                         energy := "pac3200_InfeedPAC3200".energy,
+	                         orgData := "EnS_Org_CycInt1s".orgData,
+	                         syncData := "EnS_Sync_Period_1".syncData,
+	                         energyMeta := "InfeedPAC3200".energyMeta);
+	
+	//Basic data collection
+	"InfeedPAC3200"(energyBasic := "EnS_Calc_InfeedPAC3200".energyBasic,
+	                bufferDB := "EnS_Buffer32469",
+	                sD := "InfeedPAC3200".energyMeta.id,
+	                orgData := "EnS_Org_CycInt1s".orgData,
+	                bufferWork := "EnS_BufferWork32469");
+	
+END_FUNCTION
+

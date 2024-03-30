@@ -1,0 +1,16 @@
+﻿FUNCTION "EnS_Drv_CycInt1sFC" : Void
+TITLE = FC for driver functionality of measuring points in cyclic interrupt OB
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Siemens
+FAMILY : EnS
+VERSION : 1.0
+//FC for driver functionality of measuring points in cyclic interrupt OB
+
+BEGIN
+	
+	//Driver Functionality for basic value
+	"pac3200_InfeedPAC3200"(orgData := "EnS_Org_CycInt1s".orgData,
+	                        energyMeta := "InfeedPAC3200".energyMeta);
+	
+END_FUNCTION
+

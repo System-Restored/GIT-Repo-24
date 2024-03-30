@@ -1,0 +1,198 @@
+﻿FUNCTION_BLOCK "R_H_Sys_Status"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+   VAR_INPUT 
+      laddrPLC1 : HW_ANY;
+      laddrPLC2 : HW_ANY;
+      laddrSystem : HW_ANY;
+      laddrProfinetPLC1 : HW_ANY;
+      laddrProfinetPLC2 : HW_ANY;
+   END_VAR
+
+   VAR_OUTPUT 
+      primaryId : Int;
+      operationStatePLC1 : UInt;
+      operationStatePLC2 : UInt;
+      operationStateSystem : UInt;
+      mrpRingState : UInt;
+   END_VAR
+
+   VAR 
+      statDiagModeCpu1 { S7_SetPoint := 'True'} : UInt := 1;
+      statCountDiagDetailsCpu1 : UInt;
+      statReturnValueCpu1 : Int;
+      statDiagCpu1 {InstructionName := 'DIS'; LibVersion := '1.0'; ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DIS;
+      statDiagModeCpu2 { S7_SetPoint := 'True'} : UInt := 1;
+      statCountDiagDetailsCpu2 : UInt;
+      statReturnValueCpu2 : Int;
+      statDiagCpu2 {InstructionName := 'DIS'; LibVersion := '1.0'; ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DIS;
+      statDiagModeSystem { S7_SetPoint := 'True'} : UInt := 1;
+      statCountDiagDetailsSystem : UInt;
+      statReturnValueSystem : Int;
+      statDiagSystem {InstructionName := 'DIS'; LibVersion := '1.0'; ExternalAccessible := 'False'; ExternalVisible := 'False'; ExternalWritable := 'False'} : DIS;
+      statDataRecord1 : "LPNDR_typeMrpInformation";
+      statDataRecord2 : "LPNDR_typeMrpInformation";
+      statLPNDR_ReadMrpState { S7_SetPoint := 'True'} : HW_ANY;
+      statLPNDR_ReadGlobalInfo_DB1 : "LPNDR_ReadGlobalInfo";
+      statLPNDR_ReadGlobalInfo_DB2 : "LPNDR_ReadGlobalInfo";
+      statLPNDR_ReadMrpState_DB : "LPNDR_ReadMrpState";
+      statExecuteClock : Bool;
+      IEC_Timer_0_Instance {InstructionName := 'TOF_TIME'; LibVersion := '1.0'} : TOF_TIME;
+      statToggleExecuteClock { S7_SetPoint := 'True'} : Bool;
+      statUndefinedState : Bool;
+      statExecuteClock2 : Bool;
+      statToggleExecuteClock2 : Bool;
+      IEC_Timer_0_Instance_1 {InstructionName := 'TOF_TIME'; LibVersion := '1.0'} : TOF_TIME;
+      IEC_Timer_0_Instance_2 {InstructionName := 'TOF_TIME'; LibVersion := '1.0'} : TOF_TIME;
+      statError1 : Bool;
+      statChoose1 : Bool;
+      IEC_Timer_0_Instance_3 {InstructionName := 'TOF_TIME'; LibVersion := '1.0'} : TOF_TIME;
+      statError2 : Bool;
+      statChoose2 : Bool;
+   END_VAR
+
+   VAR_TEMP 
+      tempGblInfoBusy1 : Bool;
+      tempGblInfoDone1 : Bool;
+      tempGblInfoError1 : Bool;
+      tempGblInfoStatus1 : Word;
+      tempGblInfoBusy2 : Bool;
+      tempGblInfoDone2 : Bool;
+      tempGblInfoError2 : Bool;
+      tempGblInfoStatus2 : Word;
+      tempMrpBusy : Bool;
+      tempMrpDone : Bool;
+      tempMrpError : Bool;
+      tempMrpStatus : Word;
+   END_VAR
+
+
+BEGIN
+	//=============================================================================
+	// Siemens// (c)Copyright (2019)
+	//-----------------------------------------------------------------------------
+	// Tested with: S7 - 1517H & S7 - 1515R
+	// Engineering: TIA Portal (V15.1)
+	// Restrictions: only with S7 - 1500R&H
+	// Requirements: S7 - 1500R&H
+	// Functionality: Diagnostics for S7 - 1500R & H systems for operating states, MRP-Ring and synchronisation state.
+	//-----------------------------------------------------------------------------
+	// Change log table:
+	// Version Date Expert in charge Changes applied
+	// 01.00.00 dd.mm.yyyy (Name of expert) First released version //=============================================================================
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	// Check Primary CPU
+	#primaryId := RH_GetPrimaryID();
+	
+	//Check Operationmode of CPU1 and CPU2 and System1 and System2
+	#statReturnValueCpu1 := GET_DIAG(MODE := #statDiagModeCpu1, LADDR := #laddrPLC1, CNT_DIAG => #statCountDiagDetailsCpu1, DIAG := #statDiagCpu1);
+	#statReturnValueCpu2 := GET_DIAG(MODE := #statDiagModeCpu2, LADDR := #laddrPLC2, CNT_DIAG => #statCountDiagDetailsCpu2, DIAG := #statDiagCpu2);
+	#statReturnValueSystem := GET_DIAG(MODE := #statDiagModeSystem, LADDR := #laddrSystem, CNT_DIAG => #statCountDiagDetailsSystem, DIAG := #statDiagSystem);
+	
+	#operationStatePLC1 := #statDiagCpu1.OperatingState;
+	#operationStatePLC2 := #statDiagCpu2.OperatingState;
+	#operationStateSystem := #statDiagSystem.OperatingState;
+	
+	//Checking MRP - Ring
+	#statLPNDR_ReadGlobalInfo_DB1(execute := #statExecuteClock,
+	                              hwId := #laddrProfinetPLC1,
+	                              mode := 2,
+	                              busy => #tempGblInfoBusy1,
+	                              done => #tempGblInfoDone1,
+	                              error => #tempGblInfoError1,
+	                              status => #tempGblInfoStatus1,
+	                              DataRecord := #statDataRecord1);
+	
+	#statLPNDR_ReadGlobalInfo_DB2(execute := #statExecuteClock,
+	                              hwId := #laddrProfinetPLC2,
+	                              mode := 2,
+	                              busy => #tempGblInfoBusy2,
+	                              done => #tempGblInfoDone2,
+	                              error => #tempGblInfoError2,
+	                              status => #tempGblInfoStatus2,
+	                              DataRecord := #statDataRecord2);
+	
+	IF #tempGblInfoError1 = TRUE THEN
+	    #statError1 := TRUE;
+	ELSE
+	    #statError1 := FALSE;
+	END_IF;
+	
+	#IEC_Timer_0_Instance_2(IN:=#statError1,
+	                        PT:=T#10ms,
+	                        Q=>#statChoose1);
+	
+	IF #tempGblInfoError2 = TRUE THEN
+	    #statError2 := TRUE;
+	ELSE
+	    #statError2 := FALSE;
+	END_IF;
+	
+	#IEC_Timer_0_Instance_3(IN := #statError2,
+	                        PT := T#10ms,
+	                        Q => #statChoose2);
+	
+	
+	
+	IF #statDataRecord1.mrpRole = 3 AND #statChoose1 = FALSE THEN
+	    // Statement section IF
+	    #statLPNDR_ReadMrpState := #laddrProfinetPLC1;
+	    #statUndefinedState := FALSE;
+	ELSIF #statDataRecord2.mrpRole = 3 AND #statChoose2 = FALSE THEN
+	    #statLPNDR_ReadMrpState := #laddrProfinetPLC2;
+	    #statUndefinedState := FALSE;
+	ELSE
+	    #statUndefinedState := TRUE;
+	    
+	END_IF;
+	
+	
+	IF #statExecuteClock = FALSE THEN
+	    #statToggleExecuteClock := TRUE;
+	ELSE
+	    ;
+	END_IF;
+	
+	#IEC_Timer_0_Instance(IN := #statToggleExecuteClock,
+	                      PT := T#5ms,
+	                      Q => #statExecuteClock);
+	
+	IF #statExecuteClock = TRUE THEN
+	    #statToggleExecuteClock := FALSE;
+	ELSE
+	    ;
+	END_IF;
+	
+	IF #statExecuteClock2 = False AND #statUndefinedState = FALSE THEN
+	    #statToggleExecuteClock2 := TRUE;
+	ELSE
+	    ;
+	END_IF;
+	
+	#IEC_Timer_0_Instance_1(IN:=#statToggleExecuteClock2,
+	                        PT:=T#5ms,
+	                        Q=>#statExecuteClock2);
+	
+	IF #statExecuteClock2 = TRUE THEN
+	    #statToggleExecuteClock2 := FALSE;
+	ELSE
+	    ;
+	END_IF;
+	
+	#statLPNDR_ReadMrpState_DB(execute := #statExecuteClock2,
+	                           hwId := #statLPNDR_ReadMrpState,
+	                           busy => #tempMrpBusy,
+	                           done => #tempMrpDone,
+	                           error => #tempMrpError,
+	                           mrpRingState => #mrpRingState,
+	                           status => #tempMrpStatus);
+	
+	IF #statUndefinedState = TRUE THEN
+	    #mrpRingState := 2;
+	ELSE
+	    ;
+	END_IF;
+	
+END_FUNCTION_BLOCK
+

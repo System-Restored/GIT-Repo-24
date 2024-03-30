@@ -1,0 +1,21 @@
+﻿FUNCTION "EnS_StartupFC" : Void
+TITLE = FC for startup OB
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Siemens
+FAMILY : EnS
+VERSION : 1.0
+//FC for startup OB
+
+BEGIN
+	
+	//Organizational data for cyclic interrupt OB
+	"EnS_Org_CycInt500ms"();
+	
+	//Organizational data for cyclic interrupt OB
+	"EnS_Org_CycInt1s"();
+	
+	//Organizational data for cyclic interrupt OB
+	"EnS_Org_CycInt200ms"();
+	
+END_FUNCTION
+

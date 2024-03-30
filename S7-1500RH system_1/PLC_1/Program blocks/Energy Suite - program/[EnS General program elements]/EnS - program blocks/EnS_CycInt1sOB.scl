@@ -1,0 +1,18 @@
+﻿ORGANIZATION_BLOCK "EnS_CycInt1sOB"
+TITLE = Cyclic interrupt OB of 1s
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Siemens
+FAMILY : EnS
+VERSION : 1.0
+//Cyclic interrupt OB of 1s
+
+BEGIN
+	//FC for organizational data in cyclic interrupt OB
+	"EnS_Org_CycInt1sFC"();
+	//FC for driver functionality of measuring points in cyclic interrupt OB
+	"EnS_Drv_CycInt1sFC"();
+	//FC for basic data of measuring points in cyclic interrupt OB
+	"EnS_Basic_CycInt1sFC"();
+	
+END_ORGANIZATION_BLOCK
+

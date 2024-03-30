@@ -1,0 +1,15 @@
+﻿FUNCTION "EnS_Org_CycInt500msFC" : Void
+TITLE = FC for organizational data in cyclic interrupt OB
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Siemens
+FAMILY : EnS
+VERSION : 1.0
+//FC for organizational data in cyclic interrupt OB
+
+BEGIN
+	
+	//Organizational data for cyclic interrupt OB
+	"EnS_Org_CycInt500ms"();
+	
+END_FUNCTION
+

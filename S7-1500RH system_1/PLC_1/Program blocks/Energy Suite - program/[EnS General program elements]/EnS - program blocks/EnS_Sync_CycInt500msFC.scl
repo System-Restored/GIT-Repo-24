@@ -1,0 +1,15 @@
+﻿FUNCTION "EnS_Sync_CycInt500msFC" : Void
+TITLE = FC for time synchronization in cyclic interrupt OB
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Siemens
+FAMILY : EnS
+VERSION : 1.0
+//FC for time synchronization in cyclic interrupt OB
+
+BEGIN
+	
+	//Time synchroniztion for period
+	"EnS_Sync_Period_1"(orgData := "EnS_Org_CycInt500ms".orgData);
+	
+END_FUNCTION
+

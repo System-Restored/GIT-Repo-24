@@ -1,0 +1,28 @@
+﻿FUNCTION "EnS_DrvAdv_CycInt200msFC" : Void
+TITLE = FC for driver advanced functionality of measuring points in cyclic interrupt OB
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Siemens
+FAMILY : EnS
+VERSION : 1.0
+//FC for driver advanced functionality of measuring points in cyclic interrupt OB
+
+BEGIN
+	
+	//Driver functionality for advanced energy data
+	"pac3200_Adv_InfeedPAC3200"(orgData := "EnS_Org_CycInt200ms".orgData,
+	                            energyMeta := "InfeedPAC3200".energyMeta,
+	                            requestBufferHeader := "LAcycCom_RequestBuffer"."header",
+	                            requestBufferElements := "LAcycCom_RequestBuffer"."elements",
+	                            enableDrvAdv := "pac3200_InfeedPAC3200".enableDrvAdv,
+	                            measData := "pac3200_InfeedPAC3200".measData);
+	
+	//Driver Functionality for advanced energy data with min/max value
+	"pac3200_AdvMinMax_InfeedPAC3200"(orgData := "EnS_Org_CycInt200ms".orgData,
+	                                  energyMeta := "InfeedPAC3200".energyMeta,
+	                                  requestBufferHeader := "LAcycCom_RequestBuffer"."header",
+	                                  requestBufferElements := "LAcycCom_RequestBuffer"."elements",
+	                                  enableDrvAdv := "pac3200_InfeedPAC3200".enableDrvAdv,
+	                                  measData := "pac3200_InfeedPAC3200".measData);
+	
+END_FUNCTION
+
